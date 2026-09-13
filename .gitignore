@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Datos personales del estudiante: nunca se versionan
+data/progreso_estudiante.sqlite
+progreso_*.sqlite
+
+# Tablas oficiales cargadas localmente por cada usuario
+paes_mcp/data/puntajes/*.json

@@ -1,0 +1,61 @@
+{
+  "id": "m1",
+  "nombre": "PAES Matemática 1 (M1)",
+  "disciplina": "Matemática 1 (M1)",
+  "descripcion": "Prueba de Competencia Matemática 1 del proceso de admisión a la educación superior en Chile.",
+  "estado": "activa",
+  "dataset": {
+    "sqlite": "data/m1/paes_m1_dataset.sqlite",
+    "tabla": "preguntas",
+    "assets_base": "data/m1/assets"
+  },
+  "estructura_oficial": {
+    "preguntas_totales": 65,
+    "preguntas_piloto": 5,
+    "preguntas_validas": 60,
+    "alternativas": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "duracion_minutos": 140,
+    "escala_puntaje": [
+      100,
+      1000
+    ]
+  },
+  "ejes_tematicos": [
+    "numeros",
+    "algebra_y_funciones",
+    "geometria",
+    "probabilidad_y_estadistica"
+  ],
+  "tablas_puntaje": {
+    "_meta": {
+      "caracter": "referencial",
+      "es_oficial": false,
+      "nota": "Puntos ancla publicos usados para interpolacion monotona. NO reemplazan la tabla oficial del DEMRE. Para resultados oficiales, cargue la tabla completa publicada por el DEMRE en 'oficiales/'."
+    },
+    "referencia_2024": {
+      "0": 100,
+      "10": 346,
+      "20": 478,
+      "30": 585,
+      "40": 688,
+      "50": 811,
+      "55": 897,
+      "58": 963,
+      "59": 989,
+      "60": 1000
+    }
+  },
+  "anios_con_tabla_propia": [
+    2024
+  ],
+  "fuente_oficial": {
+    "organismo": "DEMRE - Universidad de Chile",
+    "url": "https://demre.cl/publicaciones/",
+    "tipo": "publicaciones oficiales de acceso libre y gratuito"
+  }
+}

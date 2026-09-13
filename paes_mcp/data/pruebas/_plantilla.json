@@ -1,0 +1,43 @@
+{
+  "_como_usar": "Copie este archivo a <id>.json (p. ej. m2.json, competencia-lectora.json), complete los campos y deje un dataset SQLite con el mismo esquema en la ruta indicada. El servidor lo detecta automaticamente al arrancar: no hay que tocar el codigo.",
+  "id": "m2",
+  "nombre": "PAES Matemática 2 (M2)",
+  "disciplina": "Matemática 2 (M2)",
+  "descripcion": "Prueba electiva de Competencia Matemática 2.",
+  "estado": "planificada",
+  "dataset": {
+    "sqlite": "data/m2/paes_m2_dataset.sqlite",
+    "tabla": "preguntas",
+    "assets_base": "data/m2/assets"
+  },
+  "estructura_oficial": {
+    "preguntas_totales": 55,
+    "preguntas_piloto": 5,
+    "preguntas_validas": 50,
+    "alternativas": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "duracion_minutos": 140,
+    "escala_puntaje": [
+      100,
+      1000
+    ]
+  },
+  "ejes_tematicos": [],
+  "tablas_puntaje": {
+    "_meta": {
+      "caracter": "referencial",
+      "es_oficial": false,
+      "nota": ""
+    }
+  },
+  "anios_con_tabla_propia": [],
+  "fuente_oficial": {
+    "organismo": "DEMRE - Universidad de Chile",
+    "url": "https://demre.cl/publicaciones/",
+    "tipo": "publicaciones oficiales de acceso libre y gratuito"
+  }
+}

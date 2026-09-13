@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paes-mcp"
+version = "0.1.0"
+description = "Servidor MCP libre y gratuito para estudiar las pruebas PAES (Chile) con material oficial del DEMRE"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["mcp", "paes", "demre", "educacion", "chile", "opensource", "tutoria"]
+authors = [{ name = "Contribuidores de paes-mcp" }]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Education",
+  "Natural Language :: Spanish",
+  "Programming Language :: Python :: 3",
+  "Topic :: Education",
+]
+dependencies = ["mcp>=1.2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.urls]
+Homepage = "https://github.com/goyanedelv/paes-mcp"
+Issues = "https://github.com/goyanedelv/paes-mcp/issues"
+
+[project.scripts]
+paes-mcp = "paes_mcp.server:main"
+
+[tool.setuptools]
+packages = ["paes_mcp"]
+
+[tool.setuptools.package-data]
+paes_mcp = ["data/pruebas/*.json", "data/puntajes/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
