@@ -13,6 +13,14 @@ import unicodedata
 
 EJE_DESCONOCIDO = "sin_clasificar"
 
+# Frases donde una palabra clave aparece con un sentido ajeno a su eje: se
+# neutralizan antes de puntuar. Se agregan solo con un caso real que lo
+# justifique, nunca de forma preventiva.
+ANTIPATRONES: tuple[str, ...] = (
+    "cuadrado magico",      # acertijo aritmetico, no geometria
+    "cubo de un numero",    # potencia, no cuerpo geometrico
+)
+
 PALABRAS_CLAVE: dict[str, tuple[str, ...]] = {
     "numeros": (
         "entero", "fraccion", "decimal", "porcentaje", "razon", "proporcion",
@@ -53,8 +61,14 @@ def normalizar(texto: str) -> str:
     return re.sub(r"\s+", " ", sin_tildes.lower())
 
 
+def _sin_antipatrones(normalizado: str) -> str:
+    for frase in ANTIPATRONES:
+        normalizado = normalizado.replace(frase, " ")
+    return normalizado
+
+
 def puntajes_por_eje(texto: str) -> dict[str, int]:
-    normalizado = normalizar(texto)
+    normalizado = _sin_antipatrones(normalizar(texto))
     return {
         eje: sum(normalizado.count(clave) for clave in claves)
         for eje, claves in PALABRAS_CLAVE.items()
@@ -63,9 +77,24 @@ def puntajes_por_eje(texto: str) -> dict[str, int]:
 
 def clasificar(texto: str) -> str:
     """Devuelve el eje tematico mas probable, o EJE_DESCONOCIDO si no hay senal."""
+    return clasificar_con_evidencia(texto)[0]
+
+
+def clasificar_con_evidencia(texto: str) -> tuple[str, list[str]]:
+    """Como `clasificar`, pero devuelve tambien las palabras que lo decidieron.
+
+    La evidencia viaja hasta la respuesta del servidor a proposito: una
+    heuristica de palabras clave se equivoca (un "cuadrado magico" no es
+    geometria), y mostrar en que se baso permite al tutor y al estudiante
+    descartarla cuando no corresponde, en vez de tomarla como un hecho.
+    """
+    normalizado = _sin_antipatrones(normalizar(texto))
     puntajes = puntajes_por_eje(texto)
     mejor = max(puntajes, key=lambda eje: puntajes[eje])
-    return mejor if puntajes[mejor] > 0 else EJE_DESCONOCIDO
+    if puntajes[mejor] == 0:
+        return EJE_DESCONOCIDO, []
+    evidencia = sorted(c for c in PALABRAS_CLAVE[mejor] if c in normalizado)
+    return mejor, evidencia
 
 
 def ejes_validos() -> list[str]:

@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable
 
 from .catalogo import CATALOGO, Catalogo, EspecificacionPrueba
-from .ejes import clasificar, normalizar
+from .ejes import clasificar_con_evidencia, normalizar
 
 LETRAS = ("A", "B", "C", "D", "E")
 
@@ -49,6 +49,7 @@ class Pregunta:
     imagen_completa: str | None
     alternativas: tuple[Alternativa, ...]
     eje_tematico: str
+    evidencia_eje: tuple[str, ...] = ()
 
     @property
     def opciones_visuales(self) -> bool:
@@ -66,6 +67,7 @@ class Pregunta:
             "enunciado_resumen": (self.enunciado[:160] + "...") if len(self.enunciado) > 160 else self.enunciado,
             "eje_tematico": self.eje_tematico,
             "clasificacion_eje": "heuristica",
+            "palabras_que_decidieron_el_eje": list(self.evidencia_eje),
             "tiene_diagrama": self.tiene_diagrama,
             "opciones_visuales": self.opciones_visuales,
             "es_piloto": self.es_piloto,
@@ -85,6 +87,11 @@ class Pregunta:
             "es_piloto": self.es_piloto,
             "eje_tematico": self.eje_tematico,
             "clasificacion_eje": "heuristica",
+            "palabras_que_decidieron_el_eje": list(self.evidencia_eje),
+            "nota_eje": (
+                "Eje inferido por palabras clave, no clasificado por el DEMRE: "
+                "si las palabras listadas no reflejan el contenido real, ignorelo."
+            ),
             "enunciado": self.enunciado,
             "tiene_diagrama": self.tiene_diagrama,
             "uri_diagrama": self.uri("enunciado") if self.tiene_diagrama else None,
@@ -148,6 +155,7 @@ class RepositorioPreguntas:
             )
         enunciado = _texto(fila["enunciado_pregunta"])
         material = " ".join([enunciado, *(a.texto for a in alternativas)])
+        eje, evidencia = clasificar_con_evidencia(material)
         return Pregunta(
             prueba=self.spec.id,
             id_unico=fila["id_unico"],
@@ -163,7 +171,8 @@ class RepositorioPreguntas:
             imagen_enunciado=_texto(fila["imagen_enunciado"]) or None,
             imagen_completa=_texto(fila["imagen_pregunta_completa"]) or None,
             alternativas=tuple(alternativas),
-            eje_tematico=clasificar(material),
+            eje_tematico=eje,
+            evidencia_eje=tuple(evidencia),
         )
 
     # ---------------------------------------------------------------- consultas

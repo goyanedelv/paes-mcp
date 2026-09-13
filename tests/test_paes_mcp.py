@@ -112,6 +112,24 @@ def test_ningun_item_no_publicado_esta_en_el_dataset(repo: RepositorioPreguntas)
 # ----------------------------------------------------------------------- ejes
 
 
+def test_los_antipatrones_neutralizan_palabras_enganosas():
+    """'cuadrado magico' es aritmetica; la palabra 'cuadrado' no debe arrastrarla a geometria."""
+    assert "cuadrado" not in ejes.clasificar_con_evidencia("un cuadrado magico de 3x3")[1]
+
+
+def test_la_clasificacion_expone_su_evidencia():
+    """El tutor debe poder ver en que se baso el eje para descartarlo si no corresponde."""
+    eje, evidencia = ejes.clasificar_con_evidencia("calcula el area del triangulo")
+    assert eje == "geometria" and {"area", "triangulo"} <= set(evidencia)
+    assert ejes.clasificar_con_evidencia("texto sin senal matematica") == (ejes.EJE_DESCONOCIDO, [])
+
+
+def test_la_ficha_muestra_la_evidencia_del_eje(repo: RepositorioPreguntas):
+    ficha = repo.obtener(ID_GEOMETRIA).ficha()
+    assert ficha["clasificacion_eje"] == "heuristica"
+    assert ficha["palabras_que_decidieron_el_eje"]
+
+
 def test_clasificacion_heuristica_es_estable():
     assert ejes.clasificar("El area del triangulo y su perimetro") == "geometria"
     assert ejes.clasificar("la probabilidad de obtener un dado") == "probabilidad_y_estadistica"
