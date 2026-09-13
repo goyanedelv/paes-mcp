@@ -13,9 +13,10 @@ cosa y qué NO hacemos**.
 - **No recolecta datos**: el progreso del estudiante se guarda en un archivo
   SQLite local en su propio computador. El servidor no envía nada a ningún
   servicio externo, no tiene telemetría y no llama a ninguna API remota.
-- **Funciona sin conexión**: no importa bibliotecas de red ni descarga nada.
-  Verificado por pruebas automatizadas (`tests/test_sin_red.py`), que ejecutan
-  el ciclo completo con la red cortada.
+- **Corre en su máquina**: no es un servicio alojado. El cliente de IA lanza el
+  servidor como proceso local y le habla por entrada y salida estándar. No
+  importa bibliotecas de red ni contacta servicios externos, verificado por
+  pruebas automatizadas (`tests/test_ejecucion_local.py`).
 
 ## 2. De dónde viene el contenido de las preguntas
 

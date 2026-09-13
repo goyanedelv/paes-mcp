@@ -5,7 +5,7 @@ con cualquier asistente de IA que hable [MCP](https://modelcontextprotocol.io)
 (Claude Desktop, Claude Code, Cursor, LibreChat, Open WebUI, agentes propios…).
 
 > 🆓 Código MIT · sin costo, sin cuentas, sin publicidad, sin telemetría.
-> 📴 **Funciona sin internet**: dataset, imágenes y corrección son locales.
+> 💻 **Corre en su máquina**: su cliente lo lanza como proceso local por stdio.
 > 📚 El contenido proviene **solo** de las publicaciones oficiales, públicas y
 > gratuitas del DEMRE. Ver [`AVISO_LEGAL.md`](AVISO_LEGAL.md).
 > 🏛️ Proyecto independiente, **no afiliado** al DEMRE ni a ninguna universidad.
@@ -128,27 +128,31 @@ pytest                      # núcleo + verificación end-to-end vía MCP
 | `PAES_MAX_BYTES_IMAGEN` | `4194304` | Tope por imagen servida. |
 | `PAES_TRANSPORTE` | `stdio` | `stdio`, `sse` o `streamable-http`. |
 
-## Funciona sin conexión
+## El servidor corre en su máquina
 
-El servidor es **completamente offline**: no importa ninguna biblioteca de red,
-no consulta APIs, no descarga nada y no envía nada. Las preguntas, las imágenes,
-el clavijero y el progreso del estudiante están en su disco.
+**No hay servicio alojado, ni instancia pública, ni nada que desplegar.** Usted
+clona el repositorio y su cliente de IA lanza el servidor como un proceso hijo
+en su computador, hablándole por entrada y salida estándar (`stdio`). No hay
+puerto abierto, no hay cuenta, no hay intermediario.
 
-Esto importa para estudiar con datos móviles limitados o conexión intermitente:
-lo único que necesita internet es su cliente de IA, si el modelo que usa es
-remoto. Con un modelo local (Ollama, LM Studio y similares), el sistema completo
-funciona sin conexión.
+Qué significa en la práctica:
 
-Dos pruebas lo hacen exigible en vez de prometerlo: `tests/test_sin_red.py`
-ejecuta el ciclo completo de estudio con toda salida de red inutilizada, y
-verifica que ningún módulo del paquete importe `socket`, `http`, `urllib`,
-`requests`, `httpx` ni similares.
+| | |
+| :--- | :--- |
+| **Dónde vive el dataset** | En su disco (`data/`), no en un servidor de terceros. |
+| **Quién corrige** | Su propia copia, contra el clavijero local. |
+| **Dónde queda su progreso** | En un SQLite suyo; nadie más lo ve. |
+| **Qué necesita internet** | Solo su cliente de IA, si usa un modelo remoto. El MCP no. |
+| **Qué se actualiza solo** | Nada: usted controla qué versión corre. |
 
-> El único caso en que se abre un puerto es si usted lo pide explícitamente con
-> `PAES_TRANSPORTE=sse` o `streamable-http`, pensado para servir el MCP en una
-> red local (una sala de clases, por ejemplo). El valor por defecto, `stdio`, no
-> usa red en absoluto: el cliente habla con el servidor por entrada y salida
-> estándar.
+El servidor no importa bibliotecas de red ni llama a servicio externo alguno, y
+`tests/test_ejecucion_local.py` lo verifica: ejecuta el ciclo completo de estudio
+con toda salida de red inutilizada y comprueba que ningún módulo importe
+`socket`, `http`, `urllib`, `requests` o `httpx`.
+
+> Si quiere servirlo a varios computadores —una sala de clases, por ejemplo—
+> puede levantarlo a propósito con `PAES_TRANSPORTE=sse` o `streamable-http`.
+> Es una decisión explícita suya; por defecto no ocurre.
 
 ## Honestidad del proyecto
 

@@ -1,10 +1,10 @@
-"""El servidor debe funcionar completo sin conexión a internet.
+"""El servidor debe funcionar por completo como proceso local.
 
-No es un detalle de implementación: es una promesa del proyecto (sin telemetría,
-sin llamadas a APIs remotas, datos del estudiante solo en su máquina) y una
-condición de uso real, porque muchos estudiantes estudian con datos móviles
-limitados o conexión intermitente. Esta prueba la hace exigible: corta toda
-salida de red y ejecuta el flujo completo de estudio.
+No es un servicio alojado: el cliente de IA lo lanza en la maquina del
+estudiante y le habla por entrada y salida estandar. De ahi que el dataset, el
+clavijero, las imagenes y el progreso vivan en disco propio y que el servidor no
+deba contactar servicio externo alguno. Estas pruebas lo hacen exigible en lugar
+de dejarlo como promesa de la documentacion.
 """
 
 from __future__ import annotations
@@ -17,15 +17,19 @@ from paes_mcp import server
 
 
 class RedProhibida(RuntimeError):
-    """Se intentó usar la red donde el proyecto promete no usarla."""
+    """Se intento contactar un servicio externo desde un servidor que es local."""
 
 
 @pytest.fixture()
 def sin_red(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Inutiliza toda salida de red durante la prueba (se restaura al terminar)."""
+    """Inutiliza toda salida de red durante la prueba (se restaura al terminar).
+
+    Asi, cualquier dependencia de un servicio remoto falla de inmediato en vez de
+    pasar inadvertida.
+    """
 
     def bloquear(*args: object, **kwargs: object) -> None:
-        raise RedProhibida("el servidor intentó usar la red")
+        raise RedProhibida("el servidor intento salir a la red")
 
     for objetivo, atributo in (
         (socket.socket, "connect"),
@@ -37,7 +41,7 @@ def sin_red(monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(objetivo, atributo, bloquear)
 
 
-def test_ciclo_de_estudio_completo_sin_conexion(
+def test_ciclo_de_estudio_completo_en_proceso_local(
     sin_red: None, monkeypatch: pytest.MonkeyPatch, tmp_path
 ) -> None:
     from paes_mcp.progreso import Progreso
@@ -68,7 +72,7 @@ def test_ciclo_de_estudio_completo_sin_conexion(
 
 
 def test_el_codigo_no_importa_bibliotecas_de_red() -> None:
-    """Ningún módulo del paquete debe traer clientes HTTP ni sockets propios."""
+    """Un servidor local no necesita clientes HTTP ni sockets propios."""
     import pkgutil
     from pathlib import Path
     import re

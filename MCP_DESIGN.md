@@ -14,11 +14,12 @@ Estos principios mandan sobre cualquier decisión técnica posterior:
 
 1. **Libre, abierto y gratuito.** Código MIT, sin costo, sin cuentas, sin
    publicidad, sin funciones bloqueadas.
-2. **Sin telemetría y offline.** El progreso del estudiante vive en un SQLite
-   local y el servidor no hace ninguna llamada de red: funciona completo sin
-   internet, verificado por `tests/test_sin_red.py`. El transporte por defecto
-   (`stdio`) no abre puertos; `sse` y `streamable-http` existen solo para quien
-   quiera servirlo deliberadamente en una red local.
+2. **Ejecución local, sin telemetría.** El servidor corre como proceso en la
+   máquina del estudiante, lanzado por su propio cliente MCP sobre `stdio`: no
+   hay servicio alojado ni instancia compartida. El progreso vive en un SQLite
+   local y no se contacta ningún servicio externo, verificado por
+   `tests/test_ejecucion_local.py`. Los transportes `sse` y `streamable-http`
+   existen solo para quien decida servirlo deliberadamente en una red local.
 3. **Origen oficial y verificable.** Todo el material proviene de publicaciones
    oficiales, públicas y gratuitas del DEMRE, con trazabilidad ítem a ítem
    (fuente, forma, número y página del PDF original). Nada de preuniversitarios,
@@ -393,7 +394,7 @@ a `compat.py`). Todo lo demás es biblioteca estándar.
 invariantes del diseño:
 
 - **Anti-spoiler:** ninguna ficha, resumen ni pista contiene la clave.
-- **Offline:** el ciclo completo de estudio corre con toda salida de red
+- **Ejecución local:** el ciclo completo corre con toda salida de red
   inutilizada, y ningún módulo importa bibliotecas de red.
 - **Seguridad de activos:** rutas con `..` o absolutas se rechazan.
 - **Puntajes:** monotonía de la interpolación, acotamiento y declaración de
