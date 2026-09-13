@@ -27,6 +27,31 @@ Pedirle ejercicios PAES a un LLM a secas falla de tres maneras:
 3. **Está ciego.** Buena parte de M1 son figuras, tablas y gráficos. Aquí cada
    pregunta viaja con su recorte PNG como contenido multimodal.
 
+## Estado de las pruebas
+
+| Prueba | Tipo | Estado | Material disponible |
+| :--- | :--- | :--- | :--- |
+| **Competencia Matemática 1 (M1)** | Obligatoria | ✅ **Implementada** | 155 ítems (2024: 65 · 2025: 45 · 2026: 45), 68 con diagrama |
+| Competencia Lectora | Obligatoria | ⬜ No implementada | — |
+| Competencia Matemática 2 (M2) | Electiva | ⬜ No implementada | — |
+| Ciencias | Electiva | ⬜ No implementada | — |
+| Historia y Ciencias Sociales | Electiva | ⬜ No implementada | — |
+
+**"No implementada" no significa "no soportada".** El servidor no sabe de M1 en
+particular: lee pruebas declaradas en `paes_mcp/data/pruebas/*.json`. Lo que
+falta para cada fila de arriba es el **dataset** construido desde las
+publicaciones oficiales del DEMRE, no código nuevo.
+
+Dos matices que conviene saber antes de usarlo:
+
+- La estructura oficial de M1 es de 65 ítems por prueba, así que 2025 y 2026
+  están **parcialmente transcritas**. `paes_estado_dataset` reporta la cobertura
+  real y `paes_generar_ensayo` avisa cuando el material no alcanza para un
+  ensayo completo.
+- Las pruebas no matemáticas necesitan además sus propios ejes de habilidad
+  (por ejemplo *localizar*, *interpretar*, *evaluar* en Competencia Lectora) en
+  `paes_mcp/ejes.py`. Es un diccionario de palabras clave, no un rediseño.
+
 ## Instalación
 
 ```bash
@@ -125,6 +150,48 @@ data/            contenido: un directorio por prueba (data/m1/…) y progreso lo
 docs/            procedencia de los datos y guía para agregar pruebas
 tests/           pruebas del núcleo y verificación end-to-end vía MCP
 ```
+
+## Cómo contribuir
+
+Toda ayuda sirve, y **no hace falta saber programar** para aportar lo que más
+falta: material transcrito desde las publicaciones oficiales.
+
+### Por dónde empezar
+
+| Si usted quiere… | Haga esto |
+| :--- | :--- |
+| Reportar un ítem mal transcrito | Abra un issue con `id_unico`, `fuente` y `pagina_pdf`; se corrige contra el PDF oficial. |
+| Completar M1 (2025 y 2026) | Agregue los ítems faltantes al dataset con su trazabilidad completa. |
+| Sumar una prueba nueva | Siga [`docs/AGREGAR_PRUEBA.md`](docs/AGREGAR_PRUEBA.md): un JSON y un dataset, sin tocar el código. |
+| Aportar una tabla oficial de puntaje | Déjela en `paes_mcp/data/puntajes/` **citando su fuente**; reemplaza la estimación actual. |
+| Mejorar la pedagogía | Afine las pistas (`pistas.py`), los prompts (`plantillas.py`) o la heurística de ejes (`ejes.py`). |
+| Mejorar el código | Corrija bugs, agregue pruebas, mejore mensajes de error. |
+
+### Entorno de desarrollo
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+pytest
+```
+
+### Reglas que no se negocian
+
+Son las que mantienen al proyecto legítimo y útil; un PR que las rompa se cierra:
+
+1. **Solo material oficial y gratuito.** Nada de preuniversitarios, editoriales,
+   plataformas de pago ni solucionarios de terceros.
+2. **Trazabilidad.** Cada ítem debe declarar `fuente`, `forma`,
+   `numero_en_fuente` y `pagina_pdf` para poder verificarse contra el original.
+3. **Nada inventado que parezca oficial.** Ni preguntas "al estilo PAES", ni
+   tablas de puntaje aproximadas presentadas como del DEMRE.
+4. **Anti-spoiler intacto.** La clave no puede salir por ninguna vía que no sea
+   `paes_verificar_respuesta`.
+5. **Cero telemetría.** Sin analítica, sin cuentas, sin envíos de datos del
+   estudiante a servicios externos.
+
+El detalle completo está en [`CONTRIBUTING.md`](CONTRIBUTING.md). Al enviar un PR
+usted acepta que su aporte de **código** se distribuya bajo MIT.
 
 ## Licencia
 
