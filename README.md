@@ -65,20 +65,34 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -e .
 ```
 
-Conéctelo a su cliente MCP (`claude_desktop_config.json` o equivalente):
+### Conectarlo a su cliente
+
+**Claude Code** — el repositorio trae un [`.mcp.json`](.mcp.json) de scope
+proyecto: al abrir esta carpeta, el cliente ofrece activar el servidor y no hay
+nada que configurar. Para tenerlo disponible en *todos* sus proyectos:
+
+```bash
+claude mcp add paes-tutor --scope user \
+  -e PAES_DATA_DIR=/ruta/a/paes-mcp \
+  -- /ruta/a/paes-mcp/.venv/bin/paes-mcp
+claude mcp list          # debe decir ✔ Connected
+```
+
+**Claude Desktop, Cursor, LibreChat u otro** — agregue a su configuración:
 
 ```json
 {
   "mcpServers": {
     "paes-tutor": {
-      "command": "python3",
-      "args": ["-m", "paes_mcp"],
-      "cwd": "/ruta/a/paes-mcp",
-      "env": { "PAES_PRUEBA_DEFAULT": "m1" }
+      "command": "/ruta/a/paes-mcp/.venv/bin/paes-mcp",
+      "env": { "PAES_DATA_DIR": "/ruta/a/paes-mcp", "PAES_PRUEBA_DEFAULT": "m1" }
     }
   }
 }
 ```
+
+`PAES_DATA_DIR` es lo único que el servidor necesita saber: dónde está `data/`.
+Sin él, asume el directorio desde el que se ejecuta.
 
 Pruébelo sin cliente:
 
@@ -159,7 +173,11 @@ con toda salida de red inutilizada y comprueba que ningún módulo importe
 - Los **puntajes** son estimados por interpolación mientras no cargue una tabla
   oficial del DEMRE en `paes_mcp/data/puntajes/`; la respuesta lo dice con
   `"es_oficial": false`. **No inventamos tablas oficiales.**
-- La clasificación por **eje temático** es heurística del servidor, no oficial.
+- La clasificación por **eje temático** es heurística del servidor, no oficial, y
+  se equivoca: la pregunta del *cuadrado mágico* (2024, n°2) queda en geometría
+  porque el enunciado dice "diagonal". Por eso cada ficha incluye
+  `palabras_que_decidieron_el_eje`: si las palabras no reflejan el contenido
+  real, el tutor puede descartar el eje en vez de creerle.
 - El dataset local **puede no cubrir la prueba completa**: `paes_estado_dataset`
   muestra la cobertura real por año.
 - Ante cualquier discrepancia, **manda el documento oficial del DEMRE**.

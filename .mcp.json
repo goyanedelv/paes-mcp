@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "paes-tutor": {
+      "type": "stdio",
+      "command": "./.venv/bin/paes-mcp",
+      "args": [],
+      "env": {
+        "PAES_DATA_DIR": "."
+      }
+    }
+  }
+}
