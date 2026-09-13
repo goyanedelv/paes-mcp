@@ -8,16 +8,30 @@ preuniversitarios, editoriales, plataformas de pago ni solucionarios de terceros
 
 ## Contenido actual del dataset (`data/m1/paes_m1_dataset.sqlite`)
 
-| Año del proceso | Ítems transcritos | Piloto | Con diagrama | Alternativas gráficas |
-| :--- | ---: | ---: | ---: | ---: |
-| 2024 | 65 | 5 | 26 | 2 |
-| 2025 | 45 | 5 | 20 | 4 |
-| 2026 | 45 | 4 | 22 | 3 |
+| Año del proceso | Ítems en el cuadernillo oficial | Transcritos | Piloto | Con diagrama | Alternativas gráficas |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| 2024 | 65 | 65 | 5 | 26 | 2 |
+| 2025 | 45 | 45 | 5 | 20 | 4 |
+| 2026 | 45 | 45 | 4 | 22 | 3 |
 
-La estructura oficial de M1 es de 65 ítems (60 válidos + 5 de pilotaje). Los años
-con menos ítems reflejan **cobertura parcial del material transcrito**, no una
-prueba más corta: `paes_estado_dataset` reporta la cobertura real y las
-herramientas de ensayo advierten cuando no alcanzan a armar una prueba completa.
+**La transcripción está completa respecto de su fuente en los tres años.**
+
+La prueba rendida tiene 65 ítems (60 válidos + 5 de pilotaje), pero el DEMRE
+publica el cuadernillo omitiendo parte de ellos: en 2025 y 2026 difundió 45 de
+los 65, reservando los otros 20 para uso futuro, aunque el clavijero sí lista
+las 65 claves. Verificado ítem a ítem contra el PDF oficial (recuento de
+encabezados de pregunta página a página, 2026-09-13): no hay ninguna pregunta
+presente en el cuadernillo que falte en el dataset.
+
+Los números no publicados quedan registrados en
+`paes_mcp/data/pruebas/m1.json` (`cobertura_publicada`), y
+`paes_estado_dataset` los reporta separados de lo que sí sería deuda de
+transcripción:
+
+| Campo | Significado |
+| :--- | :--- |
+| `no_publicados_por_el_demre` | El ítem no aparece en ninguna publicación oficial. **No se puede incorporar, y no se inventa.** |
+| `pendientes_de_transcribir` | El ítem sí está en el cuadernillo oficial y falta en el dataset. Hoy: vacío en los tres años. |
 
 ## Trazabilidad ítem a ítem
 

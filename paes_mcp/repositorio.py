@@ -255,18 +255,41 @@ class RepositorioPreguntas:
             d = por_anio.setdefault(
                 p.anio,
                 {"anio": p.anio, "preguntas": 0, "pilotos": 0, "con_diagrama": 0,
-                 "con_opciones_visuales": 0, "ejes": {}},
+                 "con_opciones_visuales": 0, "ejes": {}, "numeros": set()},
             )
+            d["numeros"].add(p.numero)
             d["preguntas"] += 1
             d["pilotos"] += int(p.es_piloto)
             d["con_diagrama"] += int(p.tiene_diagrama)
             d["con_opciones_visuales"] += int(p.opciones_visuales)
             d["ejes"][p.eje_tematico] = d["ejes"].get(p.eje_tematico, 0) + 1
+        for anio, d in por_anio.items():
+            numeros = d.pop("numeros")
+            no_publicados = self.spec.items_no_publicados(anio)
+            oficiales = (
+                self.spec.cobertura_publicada.get(str(anio), {}).get("items_oficiales")
+                or self.spec.estructura.preguntas_totales
+            )
+            # Ausentes del dataset que TAMPOCO estan en el cuadernillo oficial:
+            # no son deuda de transcripcion, no existen en ninguna fuente publica.
+            faltantes = [
+                n for n in range(1, oficiales + 1)
+                if n not in numeros and n not in no_publicados
+            ]
+            d["items_oficiales"] = oficiales
+            d["no_publicados_por_el_demre"] = no_publicados
+            d["pendientes_de_transcribir"] = faltantes
+            d["cobertura"] = (
+                "completa respecto del cuadernillo publicado" if not faltantes
+                else f"faltan {len(faltantes)} items presentes en el cuadernillo oficial"
+            )
+
         return {
             "prueba": self.spec.id,
             "nombre": self.spec.nombre,
             "total_preguntas": len(preguntas),
             "preguntas_por_anio": [por_anio[a] for a in sorted(por_anio)],
+            "nota_cobertura": self.spec.cobertura_publicada.get("_meta", {}).get("nota", ""),
             "clasificacion_eje": "heuristica (no oficial)",
             "fuente_oficial": dict(self.spec.fuente_oficial),
         }

@@ -60,6 +60,7 @@ class EspecificacionPrueba:
     estructura: EstructuraOficial
     ejes_tematicos: tuple[str, ...]
     tablas_puntaje: dict[str, Any]
+    cobertura_publicada: dict[str, Any]
     anios_con_tabla_propia: tuple[int, ...]
     fuente_oficial: dict[str, str]
     ruta_spec: Path = field(repr=False, default=Path())
@@ -74,6 +75,15 @@ class EspecificacionPrueba:
                 f"La prueba '{self.id}' esta declarada pero falta su dataset en "
                 f"{self.ruta_sqlite}. Consulte docs/AGREGAR_PRUEBA.md."
             )
+
+    def items_no_publicados(self, anio: int) -> list[int]:
+        """Items que el DEMRE omitio del cuadernillo publicado de ese proceso.
+
+        No son una deuda de transcripcion: no existen en ninguna fuente oficial
+        y por lo tanto no pueden incorporarse al dataset.
+        """
+        datos = self.cobertura_publicada.get(str(anio), {})
+        return sorted(datos.get("items_no_publicados", []))
 
     def resumen(self) -> dict[str, Any]:
         return {
@@ -113,6 +123,7 @@ class EspecificacionPrueba:
             estructura=EstructuraOficial.desde_dict(datos.get("estructura_oficial", {})),
             ejes_tematicos=tuple(datos.get("ejes_tematicos", [])),
             tablas_puntaje=datos.get("tablas_puntaje", {}),
+            cobertura_publicada=datos.get("cobertura_publicada", {}),
             anios_con_tabla_propia=tuple(datos.get("anios_con_tabla_propia", [])),
             fuente_oficial=datos.get("fuente_oficial", {}),
             ruta_spec=ruta,

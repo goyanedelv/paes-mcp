@@ -31,7 +31,7 @@ Pedirle ejercicios PAES a un LLM a secas falla de tres maneras:
 
 | Prueba | Tipo | Estado | Material disponible |
 | :--- | :--- | :--- | :--- |
-| **Competencia Matemática 1 (M1)** | Obligatoria | ✅ **Implementada** | 155 ítems (2024: 65 · 2025: 45 · 2026: 45), 68 con diagrama |
+| **Competencia Matemática 1 (M1)** | Obligatoria | ✅ **Implementada** | 155 ítems — **todos los publicados** (2024: 65/65 · 2025: 45/45 · 2026: 45/45), 68 con diagrama |
 | Competencia Lectora | Obligatoria | ⬜ No implementada | — |
 | Competencia Matemática 2 (M2) | Electiva | ⬜ No implementada | — |
 | Ciencias | Electiva | ⬜ No implementada | — |
@@ -44,10 +44,13 @@ publicaciones oficiales del DEMRE, no código nuevo.
 
 Dos matices que conviene saber antes de usarlo:
 
-- La estructura oficial de M1 es de 65 ítems por prueba, así que 2025 y 2026
-  están **parcialmente transcritas**. `paes_estado_dataset` reporta la cobertura
-  real y `paes_generar_ensayo` avisa cuando el material no alcanza para un
-  ensayo completo.
+- La prueba oficial tiene 65 ítems, pero **el DEMRE no publica los 65**: los
+  cuadernillos de 2025 y 2026 traen 45 cada uno y los 20 restantes quedan
+  reservados por el organismo (el clavijero sí lista las 65 claves). Esos ítems
+  **no existen en ninguna fuente oficial y no se inventan aquí**.
+  `paes_estado_dataset` distingue explícitamente lo `no_publicados_por_el_demre`
+  de lo `pendientes_de_transcribir` —hoy, cero— y `paes_generar_ensayo` avisa
+  cuando el material no alcanza para una prueba completa.
 - Las pruebas no matemáticas necesitan además sus propios ejes de habilidad
   (por ejemplo *localizar*, *interpretar*, *evaluar* en Competencia Lectora) en
   `paes_mcp/ejes.py`. Es un diccionario de palabras clave, no un rediseño.
@@ -161,7 +164,7 @@ falta: material transcrito desde las publicaciones oficiales.
 | Si usted quiere… | Haga esto |
 | :--- | :--- |
 | Reportar un ítem mal transcrito | Abra un issue con `id_unico`, `fuente` y `pagina_pdf`; se corrige contra el PDF oficial. |
-| Completar M1 (2025 y 2026) | Agregue los ítems faltantes al dataset con su trazabilidad completa. |
+| Agregar un proceso nuevo (2027…) | Extraiga el cuadernillo oficial con su clavijero y súmelo con trazabilidad completa. |
 | Sumar una prueba nueva | Siga [`docs/AGREGAR_PRUEBA.md`](docs/AGREGAR_PRUEBA.md): un JSON y un dataset, sin tocar el código. |
 | Aportar una tabla oficial de puntaje | Déjela en `paes_mcp/data/puntajes/` **citando su fuente**; reemplaza la estimación actual. |
 | Mejorar la pedagogía | Afine las pistas (`pistas.py`), los prompts (`plantillas.py`) o la heurística de ejes (`ejes.py`). |

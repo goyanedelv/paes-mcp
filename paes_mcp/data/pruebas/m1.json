@@ -57,5 +57,69 @@
     "organismo": "DEMRE - Universidad de Chile",
     "url": "https://demre.cl/publicaciones/",
     "tipo": "publicaciones oficiales de acceso libre y gratuito"
+  },
+  "cobertura_publicada": {
+    "_meta": {
+      "nota": "El DEMRE publica el cuadernillo de cada proceso omitiendo algunos items, que reserva para uso futuro; el clavijero, en cambio, lista las 65 claves. Los numeros listados en 'items_no_publicados' NO aparecen en el cuadernillo oficial y por lo tanto no pueden incorporarse al dataset.",
+      "verificado": "2026-09-13",
+      "metodo": "Recuento de encabezados de pregunta pagina a pagina sobre el PDF oficial."
+    },
+    "2024": {
+      "items_oficiales": 65,
+      "items_publicados": 65,
+      "items_no_publicados": []
+    },
+    "2025": {
+      "items_oficiales": 65,
+      "items_publicados": 45,
+      "items_no_publicados": [
+        1,
+        5,
+        8,
+        12,
+        14,
+        16,
+        18,
+        19,
+        20,
+        22,
+        30,
+        37,
+        39,
+        40,
+        41,
+        43,
+        45,
+        46,
+        50,
+        56
+      ]
+    },
+    "2026": {
+      "items_oficiales": 65,
+      "items_publicados": 45,
+      "items_no_publicados": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        16,
+        17,
+        20,
+        21,
+        29,
+        36,
+        37,
+        38,
+        39,
+        44,
+        46,
+        58,
+        63,
+        65
+      ]
+    }
   }
 }

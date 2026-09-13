@@ -80,12 +80,14 @@ def generar(
     advertencias: list[str] = []
     if len(preguntas) < objetivo:
         advertencias.append(
-            f"Se solicitaron {objetivo} preguntas y el material local disponible alcanza para "
-            f"{len(preguntas)}. Agregue mas publicaciones oficiales al dataset para completar el ensayo."
+            f"Se solicitaron {objetivo} preguntas y el material oficial disponible alcanza para "
+            f"{len(preguntas)}. Recuerde que el DEMRE publica cada cuadernillo omitiendo parte de "
+            "sus items, de modo que no siempre es posible reunir una prueba completa."
         )
     if modalidad == "completo" and len(preguntas) < estructura.preguntas_validas:
         advertencias.append(
-            "Este ensayo no replica la extension oficial de la prueba; tratelo como practica parcial."
+            "Este ensayo no replica la extension oficial de la prueba; tratelo como practica parcial. "
+            "Consulte 'paes_estado_dataset' para ver que items no fueron publicados por el DEMRE."
         )
 
     sesion_id = progreso.crear_sesion(repo.spec.id, modalidad, [p.id_unico for p in preguntas])

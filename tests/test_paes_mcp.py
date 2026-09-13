@@ -88,6 +88,27 @@ def test_pregunta_inexistente(repo: RepositorioPreguntas):
         repo.obtener("PAES_1999_M1_Q99")
 
 
+def test_cobertura_distingue_lo_no_publicado_de_lo_pendiente(repo: RepositorioPreguntas):
+    """2025 y 2026 tienen 45 items porque el DEMRE publico solo 45, no por una
+    transcripcion incompleta: no debe quedar nada pendiente de transcribir."""
+    por_anio = {a["anio"]: a for a in repo.estadisticas()["preguntas_por_anio"]}
+    assert por_anio[2024]["preguntas"] == 65
+    assert not por_anio[2024]["no_publicados_por_el_demre"]
+    for anio in (2025, 2026):
+        datos = por_anio[anio]
+        assert datos["preguntas"] == 45
+        assert len(datos["no_publicados_por_el_demre"]) == 20
+        assert datos["pendientes_de_transcribir"] == []
+        assert datos["preguntas"] + len(datos["no_publicados_por_el_demre"]) == datos["items_oficiales"]
+
+
+def test_ningun_item_no_publicado_esta_en_el_dataset(repo: RepositorioPreguntas):
+    """Blindaje contra items inventados: lo que el DEMRE no publico no puede aparecer."""
+    for anio in (2025, 2026):
+        numeros = {p.numero for p in repo.buscar(anio=anio, excluir_pilotos=False, limite=65)[1]}
+        assert not numeros & set(repo.spec.items_no_publicados(anio))
+
+
 # ----------------------------------------------------------------------- ejes
 
 

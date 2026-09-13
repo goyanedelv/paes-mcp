@@ -18,6 +18,9 @@ data/
 
 ## Reglas
 
+- **Solo entra material publicado.** Si un ítem no aparece en el cuadernillo
+  oficial, no entra al dataset: los números omitidos por el DEMRE se registran en
+  `cobertura_publicada` dentro del JSON de la prueba, no se reconstruyen.
 - **El SQLite manda.** Es lo único que lee el servidor. Los archivos de
   `exports/` son copias de conveniencia para usar el dataset fuera de este
   proyecto; si regenera el dataset, regenérelos también.

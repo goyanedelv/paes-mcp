@@ -403,7 +403,8 @@ cliente MCP real sobre transporte stdio (`list_tools`, `call_tool`,
 
 ## 11. Hoja de ruta
 
-1. Completar la cobertura de M1 con más publicaciones oficiales.
+1. Incorporar cada nuevo cuadernillo oficial de M1 a medida que el DEMRE lo
+   publique (los ítems que el organismo reserva no son incorporables).
 2. Cargar tablas oficiales de conversión citadas, reemplazando las estimaciones.
 3. Declarar **M2** siguiendo `docs/AGREGAR_PRUEBA.md`.
 4. Extender la heurística de ejes a pruebas no matemáticas (Competencia Lectora,
